@@ -41,11 +41,12 @@ var (
 )
 
 var (
-	flagset     = flag.NewFlagSet("", flag.ExitOnError)
-	connectFlag = flagset.String("s", "localhost", "host[:port] of Bitcoin Core wallet RPC server")
-	rpcuserFlag = flagset.String("rpcuser", "", "username for wallet RPC authentication")
-	rpcpassFlag = flagset.String("rpcpass", "", "password for wallet RPC authentication")
-	testnetFlag = flagset.Bool("testnet", false, "use testnet network")
+	flagset      = flag.NewFlagSet("", flag.ExitOnError)
+	connectFlag  = flagset.String("s", "localhost", "host[:port] of Bitcoin Core wallet RPC server")
+	rpcuserFlag  = flagset.String("rpcuser", "", "username for wallet RPC authentication")
+	rpcpassFlag  = flagset.String("rpcpass", "", "password for wallet RPC authentication")
+	testnetFlag  = flagset.Bool("testnet", false, "use testnet network")
+	forceYesFlag = flagset.Bool("force-yes", true, "If True, Will assume yes for all questions")
 )
 
 // There are two directions that the atomic swap can be performed, as the
@@ -550,6 +551,9 @@ func getRawChangeAddress(c *rpc.Client) (btcutil.Address, error) {
 }
 
 func promptPublishTx(c *rpc.Client, tx *wire.MsgTx, name string) error {
+	if *forceYesFlag == true {
+		return nil
+	}
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Printf("Publish %s transaction? [y/N] ", name)
