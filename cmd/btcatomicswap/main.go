@@ -551,7 +551,7 @@ func getRawChangeAddress(c *rpc.Client) (btcutil.Address, error) {
 }
 
 func promptPublishTx(c *rpc.Client, tx *wire.MsgTx, name string) error {
-	if !*forceYesFlag == true {
+	if *forceYesFlag == true {
 		txHash, err := c.SendRawTransaction(tx, false)
 		if err != nil {
 			return fmt.Errorf("sendrawtransaction: %v", err)
